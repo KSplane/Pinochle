@@ -229,14 +229,13 @@ public class Deck
 	}
 	
 	
-	public static void Deal(Player[] tempTable)
+	public static void Deal()
 	{
 		int index = 0;
 			
 		Player currPlayer = Table.Next();
-		System.out.println(currPlayer.getName());
 		
-		if(tempTable.length == 3)
+		if(Table.getLength() == 3)
 		{
 			for(int count = 0; count < (deck.length - 3); count++)
 			{
