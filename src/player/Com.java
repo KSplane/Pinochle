@@ -13,6 +13,7 @@ public class Com extends Player
 	private boolean hasKingAround;
 	private boolean hasTenAround;
 	private boolean hasAceAround;
+	private int nineCount;
 	
 	
 	public Com(int numberOfPlayers) 
@@ -90,6 +91,14 @@ public class Com extends Player
 		this.runOffByOneSuit = runOffByOneSuit;
 	}
 
+	public int getNineCount() {
+		return nineCount;
+	}
+
+	public void setNineCount(int nineCount) {
+		this.nineCount = nineCount;
+	}
+
 	public void calcualteBid()
 	{
 		Card [] tempHand = getHand();
@@ -132,6 +141,7 @@ public class Com extends Player
 		
 		currBid += aceCount(); 
 		
+		//if we do not have run and are not biddign on kiddey the longest suit with an ace will be the trump suit. Also calculating if AI has any 9s in here because it is the easiest place to
 		currBid += checkLongSuit();
 		
 		
@@ -250,7 +260,6 @@ public class Com extends Player
 		hasJack = hasQueen =  hasKing = hasTen = hasAce = first = false;
 		
 		int runCount = 0;
-	
 		char result = 'n';
 		
 		for (int index = 0; index < tempHand.length; index++ )
@@ -543,5 +552,12 @@ public class Com extends Player
 		
 	
 		return result;
+	}
+
+	public void displayMeld() 
+	{
+		String meld = "";
+		
+		
 	}
 }
