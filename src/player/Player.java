@@ -1,7 +1,6 @@
 package player;
 
 import deck.Card;
-import gameController.GameController;
 
 public class Player 
 {
@@ -166,7 +165,6 @@ public class Player
 					spades = rePopulate(spades,temp); //read everything back into spades that was already in it
 				}
 				
-				System.out.println(spades.length);
 				spades[spades.length-1] = card; //add new card to hand
 				spades = sort(spades); //put cards from 9-A
 				break;
@@ -179,7 +177,6 @@ public class Player
 					clubs = rePopulate(clubs, temp);
 				}
 				
-				System.out.println(clubs.length);
 				clubs[clubs.length-1] = card;
 				clubs = sort(clubs);
 				break;
@@ -192,7 +189,6 @@ public class Player
 						hearts = rePopulate(hearts, temp);
 				}
 				
-				System.out.println(hearts.length);
 				hearts[hearts.length - 1] = card;
 				hearts = sort(hearts);
 				break;
@@ -205,7 +201,6 @@ public class Player
 					diamonds = rePopulate(diamonds, temp);
 				}
 				
-				System.out.println(diamonds.length);
 				diamonds[diamonds.length-1] = card;
 				diamonds = sort(diamonds);
 				break;
@@ -290,4 +285,16 @@ public class Player
 		
 		System.out.println("");
 	}
+
+	public void addKideyToHand(Card[] kiddy) 
+	{
+		this.hand = new Card[this.hand.length + 3];
+		
+		for(int count = 0; count < 3; count++)
+		{
+			addToHand(kiddy[count]);
+		}
+		
+	}
+
 }
