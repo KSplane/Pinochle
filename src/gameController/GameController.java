@@ -84,15 +84,14 @@ public class GameController
 	private static void Play(int numberOfPlayers)
 	{
 		boolean gameOver = false;
-		Player [] tempTable = Table.getTableInstance();
+		
 		
 		while(!gameOver)
 		{
-			Deck.Deal(tempTable);
+			Deck.Deal();
 			
 			Player currBidder = Table.Next();
 			
-			//THIS IS WHERE IM PRINTING HANDS BEFORE BIDDING PHASE
 			for(int count = 0; count < numberOfPlayers; count++)
 			{
 				if(((Player) currBidder).getIsPlayer())
@@ -109,12 +108,12 @@ public class GameController
 					
 			} 
 	
-			biddingPhase(tempTable);			
+			biddingPhase();			
 			gameOver = true;
 		}
 	}
 	
-	private static void biddingPhase(Player[] tempTable) 
+	private static void biddingPhase() 
 	{
 		boolean biddingPhaseOver = false;
 		Player currPlayer =  Table.Next();
@@ -159,40 +158,48 @@ public class GameController
 			}
 			
 			currPlayer = Table.Next();
-			biddingPhaseOver = checkIsBiddingPhaseOver(tempTable);	
+			biddingPhaseOver = checkIsBiddingPhaseOver();	
 		}
 		
 		if(currBid == 20) //no one bid so the dealer is stuck with the bid
-		{
 			biddingWinner = Table.getDealer();
-		}
+		
 		
 		else
-		{
+		{	
 			biddingWinner = currPlayer;
+			currPlayer.addKideyToHand(getKiddy());
+			
+			if(!currPlayer.getIsPlayer())
+			{
+				currPlayer.printHand();
+				((Com) currPlayer).calcualteBid();
+				
+			}	
 		}
 		
-		Table.updateDealer();
+		//displayMeld();
+	}
+	
+	
+	private static void displayMeld() 
+	{
+		Player currPlayer = Table.Next(); ;
 		
-		System.out.println(biddingWinner.getBid());
-		biddingWinner.printHand();
+		for(int count = 0; count < Table.getLength(); count++)
+		{
+			if(!currPlayer.getIsPlayer())
+			{
+				((Com) currPlayer).displayMeld();
+			}
+		}
 		
-		System.out.println(kiddy[0].getValue() + kiddy[0].getSuit());
-		System.out.println(kiddy[1].getValue() + kiddy[1].getSuit());
-		System.out.println(kiddy[2].getValue() + kiddy[2].getSuit());
-		
-		
-		biddingWinner.addToHand(kiddy[0]);
-		biddingWinner.addToHand(kiddy[1]);
-		biddingWinner.addToHand(kiddy[2]);
-		
-		((Com) biddingWinner).calcualteBid();
-		System.out.println(biddingWinner.getBid());
-		biddingWinner.printHand();
 	}
 
-	private static boolean checkIsBiddingPhaseOver(Player[] tempTable) 
+	private static boolean checkIsBiddingPhaseOver() 
 	{
+		Player[] tempTable = Table.getTableInstance();
+		
 		int biddingCount = 0;
 		int index = 0;
 		boolean result = true;
