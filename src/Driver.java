@@ -3,7 +3,8 @@ import gameController.GameController;
 
 /*
 NEXT PROJECT STEP:
-FIX CHECK RUN SO THAT CODE IS NOT COPPY PASTED FOR DIAMONDS
+Rewrite function for checking which suit is the longest when having runs in multiple suits
+check to make sure new run function works the same as before
 ADD LOGIC FOR COUNTING 9S TO CHECK RUN AND CHECK LONG SUIT SO DISPLAYING MELD ISNT A HASSLE
 WORK ON DISPAYING MELD FOR EACH PLAYER
 
