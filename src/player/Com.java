@@ -256,148 +256,100 @@ public class Com extends Player
 	}
 	private char checkRun(Card [] tempHand)
 	{
-		boolean hasJack, hasQueen, hasKing, hasTen, hasAce, first;
-		hasJack = hasQueen =  hasKing = hasTen = hasAce = first = false;
-		
-		int runCount = 0;
-		char result = 'n';
-		
-		for (int index = 0; index < tempHand.length; index++ )
-		{
-			if(index > 0)
-				first = checkFirst(tempHand, index);
-				
-			if(first)
-			{
-				if(hasJack && hasQueen && hasKing && hasTen && hasAce)
-				
-					/*
-					 * Basically gotta do this dumb shit because we could have a run in more than
-					 * one suit. So make a string of all the suits then pick the best suit and 
-					 * return that as a char
-					 */
-					runSuits = runSuits.concat(Character.toString(tempHand[index -1].getSuit()));  
-				
-				
-				else // If we are only missing one card in the run then bid on kiddy to try to get bid
-				{
-					if(hasJack)
-						runCount++;
-					
-					if(hasQueen)
-						runCount++;
-					
-					if(hasKing)
-						runCount++;
-					
-					if(hasTen)
-						runCount++;
-					
-					if(hasAce)
-						runCount++;
-					
-					if(runCount == 4)
-					{
-						runOffByOneSuit = runOffByOneSuit.concat(Character.toString(tempHand[index -1].getSuit()));
-						bidOnKiddey = true;
-					}
-				}
-				
-				hasJack = hasQueen = hasKing = hasTen = hasAce = false;   	
-			}
-			
-			if(tempHand[index].getValue().equals("J"))
-					hasJack = true;
-			
-			else if(tempHand[index].getValue().equals("Q"))
-			
-					hasQueen = true;
-			
-			else if(tempHand[index].getValue().equals("K"))
-					hasKing = true;
-			
-				
-			else if(tempHand[index].getValue().equals("10"))
-					hasTen = true;
-			
-			
-			else if(tempHand[index].getValue().equals("A"))
-					hasAce = true;
-		}
-		
-		//need to check for a run in diamonds
+		int spadesIndex = getSpades().length;
+		int clubsIndex = getClubs().length;
+		int heartsIndex = getHearts().length;
 
-		if(hasJack && hasQueen && hasKing && hasTen && hasAce)
-			runSuits = runSuits.concat("D");
+		String runSuits = "";
+		char result = 0;
+
+		if(hasRun(0, spadesIndex))
+			runSuits.concat("S");
+
+		if(hasRun(spadesIndex, heartsIndex))
+			runSuits.concat("H");
+
+		if(hasRun(heartsIndex,clubsIndex))
+			runSuits.concat("C");
+
+		if(hasRun(clubsIndex))
+			runSuits.concat("D");
 		
-		else
-		{
-			runCount = 0;
-			
-			if(hasJack)
-				runCount++;
-			
-			if(hasQueen)
-				runCount++;
-			
-			if(hasKing)
-				runCount++;
-			
-			if(hasTen)
-				runCount++;
-			
-			if(hasAce)
-				runCount++;
-			
-			if(runCount == 4)
-			{
-				runOffByOneSuit = runOffByOneSuit.concat("D");
-				bidOnKiddey = true;
-			}
-		}
-		
-				
 		if(runSuits.length() == 1)
+		{
 			result = runSuits.charAt(0);
+		}
 		
 		else if(runSuits.length() > 1)
-			result = getRunSuit(runSuits);
+		{
+			//result = getRunSuit(runSuits);
+		}
 		
 		return result;
 	}
 
-	private char getRunSuit(String runSuits) 
+	private boolean hasRun(int startingIndex, int endingIndex)
 	{
-		Card [][] potentialSuits = new Card[4][]; //Maximum there could be 4 suits
-		
-		for(int index = 0; index < runSuits.length(); index++)
-		{
-			if(Character.toString(runSuits.charAt(index)).equals("C"))
-					potentialSuits [index] = getClubs();
-			
-			else if(Character.toString(runSuits.charAt(index)).equals("D"))
-				potentialSuits [index] = getDiamonds();
-			
-			else if(Character.toString(runSuits.charAt(index)).equals("S"))
-				potentialSuits [index] = getSpades();
-			
-			else
-				potentialSuits [index] = getHearts();	
-		}
-		
-		int longestSuit = 0;
-		
-		for(int count = 1; count < runSuits.length(); count++)
-		{
-			if(potentialSuits[longestSuit].length < potentialSuits[count].length)
-			{
-				longestSuit = count;
-			}
-		}
-		
-		return runSuits.charAt(longestSuit);
-	}
+		boolean result, hasJack, hasQueen, hasKing, hasTen, hasAce;
+			result = hasJack = hasQueen =  hasKing = hasTen = hasAce = false;	
 
+		Card [] tempHand = getHand();
+
+		for(int count = startingIndex; startingIndex < endingIndex; count++)
+		{
+			if(tempHand[count].getValue().equals("J"))
+				hasJack = true;
+				
+			else if(tempHand[count].getValue().equals("Q"))
+				hasQueen = true;
+				
+			else if(tempHand[count].getValue().equals("K"))
+				hasKing = true;
+				
+			else if(tempHand[count].getValue().equals("10"))
+				hasTen = true;
+				
+			else if(tempHand[count].getValue().equals("A"))
+				hasAce = true;
+		}
+
+		if(hasJack && hasQueen && hasKing && hasTen && hasAce)
+			result = true;	
+
+		return result;	
+	}
+	
+	public boolean hasRun(int index)
+	{
+		boolean result, hasJack, hasQueen, hasKing, hasTen, hasAce;
+			result = hasJack = hasQueen =  hasKing = hasTen = hasAce = false;	
+
+		Card [] tempHand = getHand();
+
+		for(int count = index; index < getHand().length; count++)
+		{
+			if(tempHand[count].getValue().equals("J"))
+				hasJack = true;
+				
+			else if(tempHand[count].getValue().equals("Q"))
+				hasQueen = true;
+				
+			else if(tempHand[count].getValue().equals("K"))
+				hasKing = true;
+				
+			else if(tempHand[count].getValue().equals("10"))
+				hasTen = true;
+				
+			else if(tempHand[count].getValue().equals("A"))
+				hasAce = true;
+		}
+
+		if(hasJack && hasQueen && hasKing && hasTen && hasAce)
+			result = true;	
+
+		return result;	
+	}
+	
 	private int checkMarriage(Card[] tempHand)
 	{
 		int queenCount    = 0;
@@ -556,7 +508,7 @@ public class Com extends Player
 
 	public void displayMeld() 
 	{
-		String meld = "";
+		//String meld = "";
 		
 		
 	}
