@@ -182,6 +182,7 @@ public class GameController
 	}
 	
 	
+	/*
 	private static void displayMeld() 
 	{
 		Player currPlayer = Table.Next(); ;
@@ -195,6 +196,7 @@ public class GameController
 		}
 		
 	}
+	*/
 
 	private static boolean checkIsBiddingPhaseOver() 
 	{

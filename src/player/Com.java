@@ -106,36 +106,44 @@ public class Com extends Player
 		int currBid = 0;
 		
 		char runSuit = checkRun(tempHand);
+		System.out.println(runSuits);
 		setTrumpSuit(runSuit);
 		int marriages = checkMarriage(tempHand);
+		System.out.println(marriages);
 		int pinochles  = checkPinochles();
+		System.out.println(pinochles);
 		
 		if(checkRound("J", tempHand))
 		{
+			System.out.println("In Jacks Around");
 			currBid+=4;
 			hasJackAround = true;
 		}
 		
 		if(checkRound("Q", tempHand))
 		{
+			System.out.println("In Queens Around");
 			currBid += 6;
 			hasQueenAround = true;
 		}
 		
 		if(checkRound("K", tempHand))
 		{
+			System.out.println("In Kings Around");
 			hasKingAround = true;
 			currBid += 8;
 		}
 		
 		if(checkRound("A", tempHand))
 		{
+			System.out.println("In Aces Arond");
 			hasAceAround = true;
 			currBid += 10;
 		}
 		
 		for(int marriageCount = 0; marriageCount < marriages; marriageCount++)
 		{
+			System.out.println("In Loop");
 			currBid+= 2;
 		}
 		
@@ -256,94 +264,63 @@ public class Com extends Player
 	}
 	private char checkRun(Card [] tempHand)
 	{
-		int spadesIndex = getSpades().length;
-		int clubsIndex = getClubs().length;
-		int heartsIndex = getHearts().length;
+		Card[] spades = getSpades();
+		Card[] clubs = getClubs();
+		Card[] hearts = getHearts();
+		Card[] diamonds = getHearts();
 
 		String runSuits = "";
 		char result = 0;
-
-		if(hasRun(0, spadesIndex))
-			runSuits.concat("S");
-
-		if(hasRun(spadesIndex, heartsIndex))
+		
+		if(hasRun(spades))
+			runSuits = runSuits.concat("S");
+		
+		if(hasRun(hearts))
 			runSuits.concat("H");
 
-		if(hasRun(heartsIndex,clubsIndex))
+		if(hasRun(clubs))
 			runSuits.concat("C");
-
-		if(hasRun(clubsIndex))
+	
+		if(hasRun(diamonds))
 			runSuits.concat("D");
-		
+			
 		if(runSuits.length() == 1)
-		{
 			result = runSuits.charAt(0);
-		}
+		
 		
 		else if(runSuits.length() > 1)
 		{
-			//result = getRunSuit(runSuits);
+			
+			
 		}
 		
+		System.out.println(result);
 		return result;
 	}
 
-	private boolean hasRun(int startingIndex, int endingIndex)
+	private boolean hasRun(Card[] suit)
 	{
 		boolean result, hasJack, hasQueen, hasKing, hasTen, hasAce;
 			result = hasJack = hasQueen =  hasKing = hasTen = hasAce = false;	
 
-		Card [] tempHand = getHand();
-
-		for(int count = startingIndex; startingIndex < endingIndex; count++)
+		for(int count = 0; count < suit.length; count++)
 		{
-			if(tempHand[count].getValue().equals("J"))
+			if(suit[count].getValue().equals("J"))
 				hasJack = true;
 				
-			else if(tempHand[count].getValue().equals("Q"))
+			else if(suit[count].getValue().equals("Q"))
 				hasQueen = true;
 				
-			else if(tempHand[count].getValue().equals("K"))
+			else if(suit[count].getValue().equals("K"))
 				hasKing = true;
 				
-			else if(tempHand[count].getValue().equals("10"))
+			else if(suit[count].getValue().equals("10"))
 				hasTen = true;
 				
-			else if(tempHand[count].getValue().equals("A"))
+			else if(suit[count].getValue().equals("A"))
 				hasAce = true;
 		}
-
-		if(hasJack && hasQueen && hasKing && hasTen && hasAce)
-			result = true;	
-
-		return result;	
-	}
-	
-	public boolean hasRun(int index)
-	{
-		boolean result, hasJack, hasQueen, hasKing, hasTen, hasAce;
-			result = hasJack = hasQueen =  hasKing = hasTen = hasAce = false;	
-
-		Card [] tempHand = getHand();
-
-		for(int count = index; index < getHand().length; count++)
-		{
-			if(tempHand[count].getValue().equals("J"))
-				hasJack = true;
-				
-			else if(tempHand[count].getValue().equals("Q"))
-				hasQueen = true;
-				
-			else if(tempHand[count].getValue().equals("K"))
-				hasKing = true;
-				
-			else if(tempHand[count].getValue().equals("10"))
-				hasTen = true;
-				
-			else if(tempHand[count].getValue().equals("A"))
-				hasAce = true;
-		}
-
+		
 		if(hasJack && hasQueen && hasKing && hasTen && hasAce)
 			result = true;	
 
