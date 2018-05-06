@@ -5,7 +5,7 @@ import player.Com;
 
 /*
 NEXT PROJECT STEP:
-Trump suit is not getting returned to calcbid fix that
+check to make sure check bid is still working 
 Rewrite function for checking which suit is the longest when having runs in multiple suits
 check to make sure new run function works the same as before
 ADD LOGIC FOR COUNTING 9S TO CHECK RUN AND CHECK LONG SUIT SO DISPLAYING MELD ISNT A HASSLE

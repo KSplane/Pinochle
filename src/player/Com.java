@@ -106,8 +106,11 @@ public class Com extends Player
 		int currBid = 0;
 		
 		char runSuit = checkRun(tempHand);
-		System.out.println(runSuits);
 		setTrumpSuit(runSuit);
+		
+		if(runSuit != ' ')
+			currBid+= 15;
+		
 		int marriages = checkMarriage(tempHand);
 		System.out.println(marriages);
 		int pinochles  = checkPinochles();
@@ -159,10 +162,6 @@ public class Com extends Player
 		
 		else if (pinochles > 1)
 			currBid += 30;
-		
-		
-		if(runSuit != 'n')
-			currBid+= 15;
 		
 		if(calcualteBidOnKiddey())
 		{
@@ -294,6 +293,11 @@ public class Com extends Player
 			
 		}
 		
+		else
+		{
+			result = ' ';
+		}
+		
 		System.out.println(result);
 		return result;
 	}
@@ -350,14 +354,18 @@ public class Com extends Player
 				kingCount = 0;
 			}
 			
-			if(tempHand[index].getValue().equals("Q") && tempHand[index].getSuit() != getTrumpSuit())
+			if(tempHand[index].getSuit() != getTrumpSuit())
 			{
-				queenCount++;
-			}
 			
-			else if(tempHand[index].getValue().equals("K"))
-			{
-				kingCount++;
+				if(tempHand[index].getValue().equals("Q") && tempHand[index].getSuit() != getTrumpSuit())
+				{
+					queenCount++;
+				}
+			
+				else if(tempHand[index].getValue().equals("K"))
+				{
+					kingCount++;
+				}
 			}
 		}
 		
