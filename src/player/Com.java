@@ -112,41 +112,35 @@ public class Com extends Player
 			currBid+= 15;
 		
 		int marriages = checkMarriage(tempHand);
-		System.out.println(marriages);
+		
 		int pinochles  = checkPinochles();
-		System.out.println(pinochles);
 		
 		if(checkRound("J", tempHand))
 		{
-			System.out.println("In Jacks Around");
 			currBid+=4;
 			hasJackAround = true;
 		}
 		
 		if(checkRound("Q", tempHand))
 		{
-			System.out.println("In Queens Around");
 			currBid += 6;
 			hasQueenAround = true;
 		}
 		
 		if(checkRound("K", tempHand))
 		{
-			System.out.println("In Kings Around");
 			hasKingAround = true;
 			currBid += 8;
 		}
 		
 		if(checkRound("A", tempHand))
 		{
-			System.out.println("In Aces Arond");
 			hasAceAround = true;
 			currBid += 10;
 		}
 		
 		for(int marriageCount = 0; marriageCount < marriages; marriageCount++)
 		{
-			System.out.println("In Loop");
 			currBid+= 2;
 		}
 		
@@ -169,6 +163,16 @@ public class Com extends Player
 		}
 		
 		this.setBid(currBid);
+		
+		System.out.println(bidOnKiddey);
+		System.out.println (runSuits);
+		System.out.println  (runOffByOneSuit);
+		System.out.println (hasJackAround);
+		System.out.println (hasQueenAround);
+		System.out.println (hasKingAround);
+		System.out.println (hasTenAround);
+		System.out.println (hasAceAround);
+		System.out.println (nineCount);
 	}
 	
 	private int checkLongSuit() 
@@ -254,6 +258,8 @@ public class Com extends Player
 		{
 			if(tempHand[count].getValue().equals("A"))
 			{
+				System.out.println("adding an ace");
+						
 				result++;
 			}
 		}
@@ -298,7 +304,6 @@ public class Com extends Player
 			result = ' ';
 		}
 		
-		System.out.println(result);
 		return result;
 	}
 
