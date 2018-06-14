@@ -101,54 +101,69 @@ public class Com extends Player
 
 	public void calcualteBid()
 	{
+		System.out.println("Entering calculate bid");
+		
 		Card [] tempHand = getHand();
 		
 		int currBid = 0;
 		
+		System.out.println("checking run");
 		char runSuit = checkRun(tempHand);
 		setTrumpSuit(runSuit);
 		
 		if(runSuit != ' ')
+		{
 			currBid+= 15;
+			System.out.println("adding 15 to bid");
+		}
 		
+		System.out.println("checkign marraiges");
 		int marriages = checkMarriage(tempHand);
 		
+		System.out.println("checking pinocles");
 		int pinochles  = checkPinochles();
 		
 		if(checkRound("J", tempHand))
 		{
+			System.out.println("we have jacks around");
+			
 			currBid+=4;
 			hasJackAround = true;
 		}
 		
 		if(checkRound("Q", tempHand))
 		{
+			System.out.println("we have queens around");
 			currBid += 6;
 			hasQueenAround = true;
 		}
 		
 		if(checkRound("K", tempHand))
 		{
+			System.out.println("we have kings around");
 			hasKingAround = true;
 			currBid += 8;
 		}
 		
 		if(checkRound("A", tempHand))
 		{
+			System.out.println("we have acess around");
 			hasAceAround = true;
 			currBid += 10;
 		}
 		
-		for(int marriageCount = 0; marriageCount < marriages; marriageCount++)
-		{
-			currBid+= 2;
-		}
 		
+		System.out.println("about to check aces");
 		currBid += aceCount(); 
 		
 		//if we do not have run and are not biddign on kiddey the longest suit with an ace will be the trump suit. Also calculating if AI has any 9s in here because it is the easiest place to
-		currBid += checkLongSuit();
+		//currBid += checkLongSuit();
 		
+		
+		for(int count = 0; count < marriages; count++ )
+		{
+			currBid+=2;
+		}
 		
 		if(pinochles == 1)
 			currBid+= 4;
@@ -159,20 +174,14 @@ public class Com extends Player
 		
 		if(calcualteBidOnKiddey())
 		{
+			System.out.println("bidding on kiddey");
 			currBid+= 15;
 		}
 		
+		
+		System.out.println("setting bid at " + currBid);
 		this.setBid(currBid);
 		
-		System.out.println(bidOnKiddey);
-		System.out.println (runSuits);
-		System.out.println  (runOffByOneSuit);
-		System.out.println (hasJackAround);
-		System.out.println (hasQueenAround);
-		System.out.println (hasKingAround);
-		System.out.println (hasTenAround);
-		System.out.println (hasAceAround);
-		System.out.println (nineCount);
 	}
 	
 	private int checkLongSuit() 
@@ -257,9 +266,8 @@ public class Com extends Player
 		for(int count = 0; count < tempHand.length; count++)
 		{
 			if(tempHand[count].getValue().equals("A"))
-			{
+			{	
 				System.out.println("adding an ace");
-						
 				result++;
 			}
 		}
@@ -278,32 +286,48 @@ public class Com extends Player
 		char result = 0;
 		
 		if(hasRun(spades))
+		{
 			runSuits = runSuits.concat("S");
+			System.out.println("we have a run in spades");
+		}	
 		
 		if(hasRun(hearts))
+		{
 			runSuits.concat("H");
-
+			System.out.println("we have a run in hearts");
+		}
 		if(hasRun(clubs))
+		{
 			runSuits.concat("C");
-	
+			System.out.println("we have a run in clubs");
+		}
+		
 		if(hasRun(diamonds))
+		{	
 			runSuits.concat("D");
+			System.out.println("we hae a run in diamonds");
+		}
 			
 		if(runSuits.length() == 1)
+		{
 			result = runSuits.charAt(0);
-		
+			System.out.println("we have a run in one suit and adding it to result" );
+		}
 		
 		else if(runSuits.length() > 1)
 		{
 			
-			
+			System.out.println("we have more than one run");
 		}
 		
 		else
 		{
+			System.out.println("we aint found shit");
 			result = ' ';
 		}
 		
+		
+		System.out.println("result is " + result);
 		return result;
 	}
 
@@ -376,6 +400,8 @@ public class Com extends Player
 		
 		marriageCount += updateMarriageCount(queenCount, kingCount); //one last time to add to the diamond marriages
 		
+		System.out.println("we have " + marriageCount + " marraiges");
+		
 		return marriageCount;
 	}
 	
@@ -407,10 +433,13 @@ public class Com extends Player
 				
 		while(jackCount > 0 && queenCount > 0)
 		{
+			System.out.println("adding a pinochle");
 			count++;
 			jackCount--;
 			queenCount--;
 		}
+		
+		System.out.println("we have " + count + " pinochles" );
 		
 		return count;
 	}
@@ -433,6 +462,7 @@ public class Com extends Player
 		
 		while(queenCount > 0 && kingCount > 0)
 		{
+			System.out.println("adding a marriage");
 			counter++;
 			queenCount--;
 			kingCount--;
@@ -490,8 +520,10 @@ public class Com extends Player
 		boolean result = false;
 		
 		if(!(runOffByOneSuit.equals("")))
+		{
+			System.out.println("setting bid on kiddey");
 			result = true;
-		
+		}
 	
 		return result;
 	}
