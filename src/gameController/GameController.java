@@ -71,8 +71,8 @@ public class GameController
 			Table.Sit(playerOne);
 			Table.Sit(playerTwo);
 			Table.Sit(playerThree);
-			
-			Play(numberOfPlayers);
+						
+			Play(numberOfPlayers); 
 		}
 		
 		else if(numberOfPlayers == 4)
@@ -84,8 +84,7 @@ public class GameController
 	private static void Play(int numberOfPlayers)
 	{
 		boolean gameOver = false;
-		
-		
+				
 		while(!gameOver)
 		{
 			Deck.Deal();
@@ -107,59 +106,95 @@ public class GameController
 				currBidder = Table.Next();
 					
 			} 
-	
+			
+			Table.setCurr(Table.getDealerValue());
 			biddingPhase();			
 			gameOver = true;
-		}
+		}	
 	}
 	
 	private static void biddingPhase() 
 	{
+		
 		boolean biddingPhaseOver = false;
 		Player currPlayer =  Table.Next();
 		Scanner sc = UtilInstances.getScannerInstance();
 		String choice = "";
 		int currBid = 20;
 		
+		System.out.println("Starting Bidding Phase");
+		
 		while(!biddingPhaseOver)
 		{
+			System.out.println("Top of while loop");
+			System.out.println("Bid is at " + currBid);
+			
 			if(currPlayer.getIsBidding()) //if the current player is bidding
 			{
 				if(currPlayer.getIsPlayer())
 				{
+					System.out.println("The bidder is player");
+					System.out.println("Would you like to bid? (y or n)");
+					
 					choice = sc.next();
 					
-					if(choice.equals("Y"))
+					if(choice.equals("Y")|| choice.equals("y") )
 					{
+						System.out.println("the player is bidding");
+						System.out.println("Please enter your bid: ");
+						
 						currBid = sc.nextInt();
 						currPlayer.setBid(currBid);
 					}
 					
 					else
 					{
+						System.out.println("Person done bidding, setting bid to false");
 						currPlayer.setIsBidding(false);
 					}
 				}
 				
 				else
 				{
+					System.out.println("The bidder is ai");
+					
 					if(currPlayer.getBid() == 0)
+					{	
+						System.out.println("calculating ai bid");
+						
+						Card [] testSuit = currPlayer.getDiamonds();
+						
+						for(int testCounter = 0; testCounter < testSuit.length; testCounter++ )
+						{
+							System.out.println(testSuit[testCounter].getSuit());
+						}
+						
 						((Com) currPlayer).calcualteBid();
-				
+						System.out.println(currPlayer.getName() + ": " + currPlayer.getBid());
+					}
+					
 					if(currPlayer.getBid() > currBid)
 					{
+						System.out.println("AI is bidding");
 						currBid++;
 						currPlayer.setBid(currBid);		
 					}
 					
 					else
+					{
+						System.out.println("AI is done bidding");
 						currPlayer.setIsBidding(false);
+					}
 				}
 			}
 			
+			System.out.println("switchign to next bidder");
 			currPlayer = Table.Next();
+			System.out.println("chekcing if bidding is over");
 			biddingPhaseOver = checkIsBiddingPhaseOver();	
 		}
+		
+		System.out.println("Out of while loop");
 		
 		if(currBid == 20) //no one bid so the dealer is stuck with the bid
 			biddingWinner = Table.getDealer();
@@ -173,16 +208,17 @@ public class GameController
 			if(!currPlayer.getIsPlayer())
 			{
 				currPlayer.printHand();
-				((Com) currPlayer).calcualteBid();
+				((Com) currPlayer).calcualteBid();	
+			}
 				
-			}	
 		}
 		
+		System.out.println(biddingWinner.getName());
 		//displayMeld();
 	}
 	
 	
-	/*
+	
 	private static void displayMeld() 
 	{
 		Player currPlayer = Table.Next(); ;
@@ -196,7 +232,7 @@ public class GameController
 		}
 		
 	}
-	*/
+	
 
 	private static boolean checkIsBiddingPhaseOver() 
 	{
@@ -208,16 +244,26 @@ public class GameController
 		
 		do
 		{
+			
+			System.out.println("top of do while");
+			
 			if(tempTable[index].getIsBidding())
+			{
+				System.out.println(tempTable[index].getName() + " is still bidding");
 				biddingCount++;
+			}
 			
 			index++;
 		
 		}while(index < tempTable.length && result);
 		
-		if(biddingCount > 1)
-			result = false;
+		System.out.println("There are " + biddingCount);
 		
+		if(biddingCount > 1)
+		{
+			System.out.println("Setting result to false");
+			result = false;
+		}
 		return result;
 	}
 }

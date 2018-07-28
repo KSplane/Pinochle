@@ -16,6 +16,31 @@ public class Table
 		
 	}
 	
+	public static Player[] getTable() {
+		return table;
+	}
+
+	public static void setTable(Player[] table) {
+		Table.table = table;
+	}
+	
+	public static int getDealerValue() {
+		return dealer;
+	}
+
+	public static void setDealerValue(int curr) {
+		Table.curr = curr;
+	}
+
+
+	public static int getCurr() {
+		return curr;
+	}
+
+	public static void setCurr(int curr) {
+		Table.curr = curr;
+	}
+
 	public static Player [] getTableInstance()
 	{
 		if(table == null)
@@ -26,32 +51,36 @@ public class Table
 		}
 		return table;
 	}
-	
+
 	public static void Sit(Player newPlayer) 	//PUSH INTO THE QUEUE
 	{
-		Player [] tempTable;
+		Player [] tempTable; 
+		Player [] currTable = getTableInstance();
 		
-		if(table == null) //if table has not been initialized 
-		{
-			getTableInstance();
-			table[0] = newPlayer;
-		}
+		if(currTable[0] == null) //if table is empty
+		
+			currTable[0] = newPlayer;
+		
 		
 		else
 		{
-			tempTable = table; //save everyone we have in the current table
-			table = new Player[tempTable.length + 1]; //declare a new table of one size extra
-			repopulate(tempTable); // put everyone from the old table into the new table
-			table[table.length - 1] = newPlayer; // add the newest player to the table
+			tempTable = currTable; //save everyone we have in the current table
+			currTable = new Player[tempTable.length + 1]; //declare a new table of one size extra
+			currTable = repopulate(currTable,tempTable); // put everyone from the old table into the new table
+			currTable[currTable.length - 1] = newPlayer; // add the newest player to the table
 		}
+		
+		setTable(currTable);
 	}
 
-	private static void repopulate(Player [] tempTable) 
+	private static Player [] repopulate(Player [] currTable, Player [] tempTable) 
 	{
 		for(int count = 0; count < tempTable.length; count++)
 		{
-			table[count] = tempTable[count];
+			currTable[count] = tempTable[count];
 		}
+		
+		return currTable;
 	}
 	
 	public static void updateDealer()
@@ -66,6 +95,8 @@ public class Table
 	
 	public static Player getDealer()
 	{
+		//System.out.println("The dealer is : " + dealer);
+		
 		return  (Player) table[dealer];
 	}
 	
@@ -76,7 +107,10 @@ public class Table
 	
 	public static Player Next()
 	{
-		if(curr < (table.length -1) ) //-1 because arrays start counting at 0
+		//System.out.println("Curr is currently" + curr);
+		//System.out.println("Currs name is currently" + table[curr].getName());
+		
+		if(curr < (table.length - 1) ) //-1 because arrays start counting at 0
 			curr++;
 		else
 			curr = 0; // we have gone trough the entire queue and need to loop back to the start
