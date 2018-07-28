@@ -21,22 +21,22 @@ public class Driver {
 	public static void main(String[] args)
 	{
 		
-	GameController.Start();
+		GameController.Start();
 		
 		/*
 		Com testComputer = new Com(3);
-		//Card tempCard = ;
+		Card tempCard;
 		
-		testComputer.addToHand(new Card('S', "J", 'B'));
 		testComputer.addToHand(new Card('S', "Q", 'B'));
 		testComputer.addToHand(new Card('S', "K", 'B'));
-		testComputer.addToHand(new Card('S', "10", 'B'));
-		testComputer.addToHand(new Card('S', "A", 'B'));
-		testComputer.addToHand(new Card('S', "J", 'B'));
-		testComputer.addToHand(new Card('C', "Q", 'B'));
-		testComputer.addToHand(new Card('C', "K", 'B'));
+		testComputer.addToHand(new Card('C', "J", 'B'));
+		testComputer.addToHand(new Card('C', "10", 'B'));
 		testComputer.addToHand(new Card('C', "A", 'B'));
-		testComputer.addToHand(new Card('D', "J", 'R'));
+		testComputer.addToHand(new Card('D', "J", 'B'));
+		testComputer.addToHand(new Card('D', "Q", 'B'));
+		testComputer.addToHand(new Card('D', "K", 'B'));
+		testComputer.addToHand(new Card('D', "10", 'B'));
+		testComputer.addToHand(new Card('D', "A", 'R'));
 		testComputer.addToHand(new Card('H', "J", 'R'));
 		testComputer.addToHand(new Card('H', "9", 'R'));
 		testComputer.addToHand(new Card('H', "10", 'R'));
@@ -46,7 +46,7 @@ public class Driver {
 		testComputer.printHand();
 		testComputer.calcualteBid();
 		System.out.println(testComputer.getBid());
-		*/	
+		*/
 	}
 	
 }
