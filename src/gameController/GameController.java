@@ -123,10 +123,10 @@ public class GameController
 		int currBid = 20;
 		
 		System.out.println("Starting Bidding Phase");
+
 		
 		while(!biddingPhaseOver)
 		{
-			System.out.println("Top of while loop");
 			System.out.println("Bid is at " + currBid);
 			
 			if(currPlayer.getIsBidding()) //if the current player is bidding
@@ -160,41 +160,27 @@ public class GameController
 					
 					if(currPlayer.getBid() == 0)
 					{	
-						System.out.println("calculating ai bid");
-						
-						Card [] testSuit = currPlayer.getDiamonds();
-						
-						for(int testCounter = 0; testCounter < testSuit.length; testCounter++ )
-						{
-							System.out.println(testSuit[testCounter].getSuit());
-						}
-						
+						System.out.println("calculating ai bid");			
 						((Com) currPlayer).calcualteBid();
 						System.out.println(currPlayer.getName() + ": " + currPlayer.getBid());
 					}
 					
 					if(currPlayer.getBid() > currBid)
 					{
-						System.out.println("AI is bidding");
-						currBid++;
-						currPlayer.setBid(currBid);		
+						System.out.println(currPlayer.getName() + " is bidding");
+						currBid++;	
 					}
 					
 					else
 					{
-						System.out.println("AI is done bidding");
+						System.out.println(currPlayer.getName() + " is done bidding");
 						currPlayer.setIsBidding(false);
-					}
+					}	
 				}
 			}
-			
-			System.out.println("switchign to next bidder");
 			currPlayer = Table.Next();
-			System.out.println("chekcing if bidding is over");
 			biddingPhaseOver = checkIsBiddingPhaseOver();	
 		}
-		
-		System.out.println("Out of while loop");
 		
 		if(currBid == 20) //no one bid so the dealer is stuck with the bid
 			biddingWinner = Table.getDealer();
@@ -202,10 +188,9 @@ public class GameController
 		
 		else
 		{	
-			biddingWinner = currPlayer;
-			currPlayer.addKideyToHand(getKiddy());
+			biddingWinner.addKideyToHand(getKiddy());
 			
-			if(!currPlayer.getIsPlayer())
+			if(!biddingWinner.getIsPlayer())
 			{
 				currPlayer.printHand();
 				((Com) currPlayer).calcualteBid();	
@@ -215,6 +200,7 @@ public class GameController
 		
 		System.out.println(biddingWinner.getName());
 		//displayMeld();
+		
 	}
 	
 	
@@ -244,26 +230,32 @@ public class GameController
 		
 		do
 		{
-			
-			System.out.println("top of do while");
-			
 			if(tempTable[index].getIsBidding())
-			{
-				System.out.println(tempTable[index].getName() + " is still bidding");
 				biddingCount++;
-			}
 			
 			index++;
 		
-		}while(index < tempTable.length && result);
+		} while(index < tempTable.length && result);
 		
-		System.out.println("There are " + biddingCount);
-		
-		if(biddingCount > 1)
-		{
-			System.out.println("Setting result to false");
+		if (biddingCount > 1)
 			result = false;
-		}
+		else
+			setBiddingWinner(tempTable);
+		
 		return result;
+	}
+	
+	private static void setBiddingWinner(Player [] tempTable)
+	{
+		int count = 0;
+		
+		do
+		{
+			if(tempTable[count].getIsBidding())
+				biddingWinner = tempTable[count];
+			
+			count++;
+			
+		}while(count < tempTable.length);
 	}
 }
