@@ -283,7 +283,6 @@ public class Deck
 			GameController.setKiddy(tempKiddy);
 		}
 		
-		System.out.println(Table.getDealerValue());
 		Table.setCurr(Table.getDealerValue());
 	}
 	

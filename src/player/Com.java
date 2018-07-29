@@ -97,18 +97,13 @@ public class Com extends Player
 		
 		char runSuit = checkRun(tempHand);
 		setTrumpSuit(runSuit);
-		System.out.println("run suit is: " + runSuit);
 		
 		if(runSuit != ' ')
 			currBid+= 15;
 		
 		int marriages = checkMarriage(tempHand);
 		
-		System.out.println("marriages: " + marriages);
-		
 		int pinochles  = checkPinochles();
-		
-		System.out.println("pinochles: " + pinochles);
 		
 		if(checkRound("J", tempHand))
 		{
@@ -116,23 +111,17 @@ public class Com extends Player
 			hasJackAround = true;
 		}
 		
-		System.out.println("Jacks around: " + hasJackAround);
-		
 		if(checkRound("Q", tempHand))
 		{
 			currBid += 6;
 			hasQueenAround = true;
 		}
-		
-		System.out.println("Queens around: " + hasQueenAround);
-		
+			
 		if(checkRound("K", tempHand))
 		{
 			hasKingAround = true;
 			currBid += 8;
 		}
-		
-		System.out.println("Kings around: " + hasKingAround);
 		
 		if(checkRound("A", tempHand))
 		{
@@ -140,23 +129,16 @@ public class Com extends Player
 			currBid += 10;
 		}
 		
-		System.out.println("Aces around: " + hasAceAround);
-		System.out.println("bid is at: " + currBid + " before ace count");
-		
 		currBid += aceCount();
-		System.out.println("bid is at: " + currBid + " after ace count");
 		
 		//if we do not have run and are not biddign on kiddey the longest suit with an ace will be the trump suit. Also calculating if AI has any 9s in here because it is the easiest place to
 		currBid += checkLongSuit();
-		System.out.println("bid is at: " + currBid + " after long suit count");
 		
 		for(int count = 0; count < marriages; count++ )
 		{
 			currBid+=2;
 		}
-		
-		System.out.println("bid is at: " + currBid + " after counting marriages");
-		
+			
 		if(pinochles == 1)
 			currBid+= 4;
 	
@@ -164,15 +146,10 @@ public class Com extends Player
 		else if (pinochles > 1)
 			currBid += 30;
 		
-		
-		System.out.println("bid is at: " + currBid + " after counting pinochles");
-		
 		if(bidOnKiddey)
 		{
 			currBid+= 15;
 		}
-		
-		System.out.println("bid is at: " + currBid + " after counting bid on kiddey");
 		
 		this.setBid(currBid);
 		

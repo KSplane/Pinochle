@@ -95,8 +95,6 @@ public class Table
 	
 	public static Player getDealer()
 	{
-		//System.out.println("The dealer is : " + dealer);
-		
 		return  (Player) table[dealer];
 	}
 	
@@ -107,9 +105,6 @@ public class Table
 	
 	public static Player Next()
 	{
-		//System.out.println("Curr is currently" + curr);
-		//System.out.println("Currs name is currently" + table[curr].getName());
-		
 		if(curr < (table.length - 1) ) //-1 because arrays start counting at 0
 			curr++;
 		else
