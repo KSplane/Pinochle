@@ -14,6 +14,7 @@ public class Player
 	private String name; //FOR DEBUGGING
 	private boolean isBidding;
 	private boolean isPlayer; //USED TO TELL WHICH OBJECT IN THE TABLE IS THE PLAYER AND WHICH IS THE COMPTUER
+	private boolean isBiddingWinner;
 	
 	public Player(int numberOfPlayers)
 	{
@@ -34,6 +35,7 @@ public class Player
 		
 		isBidding = true;
 		isPlayer = true;
+		isBiddingWinner = false;
 	}
 	
 	public Card[] getHand()
@@ -78,15 +80,15 @@ public class Player
 		this.diamonds = diamonds;
 	}
 	
-	public Card [] getSuit(String suit)
+	public Card [] getSuit(char suit)
 	{
-		if(suit.equals("S"))
+		if(suit == ('S'))
 			return spades;
 		
-		else if(suit.equals("H"))
+		else if(suit == ('H'))
 			return hearts;
 		
-		else if(suit.equals("C"))
+		else if(suit == ('C'))
 			return clubs;
 		else
 			return diamonds;
@@ -143,6 +145,14 @@ public class Player
 		return isPlayer;
 	}
 	
+	public boolean getisBiddingWinner() {
+		return isBiddingWinner;
+	}
+
+	public void setBiddingWinner(boolean isBiddingWinner) {
+		this.isBiddingWinner = isBiddingWinner;
+	}
+
 	public void addToHand(Card card)
 	{
 		char suit = card.getSuit();

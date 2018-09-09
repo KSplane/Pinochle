@@ -1,6 +1,7 @@
 package deck;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import gameController.GameController;
 import player.Player;
@@ -231,59 +232,57 @@ public class Deck
 	
 	public static void Deal()
 	{
-		int index = 0;
-			
+		
+		Random rngJesus = UtilInstances.getRandomNumberGeneratorInstance();
+		int index;
+		int kiddyIndex = 0;
 		Player currPlayer = Table.Next();
+		ArrayList<Integer> usedNums = new ArrayList<Integer>();
+		Card [] tempKiddy = new Card[3];
 		
 		if(Table.getLength() == 3)
 		{
-			for(int count = 0; count < (deck.length - 3); count++)
+			for(int count = 0; count < deck.length; count++)
 			{
-				currPlayer.addToHand(deck[index]);
-				index++;
+				index = rngJesus.nextInt(deck.length);
 				
-				if(Math.floorDiv(count, 3) < Math.floorDiv(count + 1, 3))
+				if(count < (deck.length - 3))
 				{
-					currPlayer = Table.Next();
+					if(usedNums.contains(index))
+					{
+						do{	
+							index = rngJesus.nextInt(deck.length); 	
+						
+						}while(usedNums.contains(index));
+					}
+					
+					currPlayer.addToHand(deck[index]); // we are adding a new card into the new deck at a random spot but are using count to iterate though the old deck
+					usedNums.add(index);
 				}
-			}
-		
-			Card [] tempKiddy = new Card[3];
-		
-			tempKiddy[0] = deck[index];
-			index++;
-			tempKiddy[1] = deck[index];
-			index++;
-			tempKiddy[2] = deck[index];
-			index++;
-		
+				
+				else
+				{
+					if(usedNums.contains(index))
+					{
+						do{	
+							index = rngJesus.nextInt(deck.length); 	
+						
+						}while(usedNums.contains(index));
+					}
+					
+					tempKiddy[kiddyIndex] = deck[index];
+					usedNums.add(index);
+					kiddyIndex++;
+				}
+				
+			if(Math.floorDiv(count, 3) < Math.floorDiv(count + 1, 3))
+			
+				currPlayer = Table.Next();
+					
 			GameController.setKiddy(tempKiddy);
+			
+			}		
 		}
-		
-		else
-		{
-			for(int count = 0; count < 15; count++)
-			{
-				currPlayer.addToHand(deck[index]);
-				index++;
-			}
-			
-			Card [] tempKiddy = new Card[3];
-			
-			tempKiddy[0] = deck[index];
-			System.out.println(tempKiddy[0].getValue() + tempKiddy[0].getSuit());
-			index++;
-			tempKiddy[1] = deck[index];
-			System.out.println(tempKiddy[1].getValue() + tempKiddy[1].getSuit());
-			index++;
-			tempKiddy[2] = deck[index];
-			System.out.println(tempKiddy[2].getValue() + tempKiddy[2].getSuit());
-			index++;
-			
-			GameController.setKiddy(tempKiddy);
-		}
-		
-		Table.setCurr(Table.getDealerValue());
 	}
 	
 	
@@ -312,8 +311,7 @@ public class Deck
 		}
 		
 		Deck.setDeck(newDeck);
-		newDeck = null;
-			
+		newDeck = null;		
 	}
 
 	public static void setDeck(Card[] newDeck) 

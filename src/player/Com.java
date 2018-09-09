@@ -1,6 +1,7 @@
 package player;
 
 import deck.Card;
+import gameController.GameController;
 
 public class Com extends Player
 {
@@ -12,9 +13,10 @@ public class Com extends Player
 	private boolean hasKingAround;
 	private boolean hasTenAround;
 	private boolean hasAceAround;
-	private int nineCount;
-	
-	
+	private String  marriageSuits;
+	private int     pinochles;
+	private int     nineCount;
+
 	public Com(int numberOfPlayers) 
 	{
 		super(numberOfPlayers);
@@ -22,6 +24,7 @@ public class Com extends Player
 		setBid(0); //so we can tell that we have not calculated our bid yet
 		setIsPlayer(false);
 		runSuits = "";
+		marriageSuits = "";
 		hasJackAround = hasQueenAround = hasKingAround = hasTenAround = hasAceAround = false;
 	}
 		
@@ -31,6 +34,22 @@ public class Com extends Player
 
 	public void setHasJackAround(boolean hasJackAround) {
 		this.hasJackAround = hasJackAround;
+	}
+
+	public int getPinochles() {
+		return pinochles;
+	}
+
+	public String getMarriageSuits() {
+		return marriageSuits;
+	}
+
+	public void setMarriageSuits(String marriageSuits) {
+		this.marriageSuits = marriageSuits;
+	}
+
+	public void setPinochles(int pinochles) {
+		this.pinochles = pinochles;
 	}
 
 	public boolean isHasQueenAround() {
@@ -92,18 +111,19 @@ public class Com extends Player
 	public void calcualteBid()
 	{
 		Card [] tempHand = getHand();
+		Card [] tempSuit;
 		
 		int currBid = 0;
+		char longSuit;
 		
-		char runSuit = checkRun(tempHand);
-		setTrumpSuit(runSuit);
-		
-		if(runSuit != ' ')
+		checkRun(tempHand);
+			
+		if(runSuits != "")
 			currBid+= 15;
 		
 		int marriages = checkMarriage(tempHand);
 		
-		int pinochles  = checkPinochles();
+		pinochles  = checkPinochles();
 		
 		if(checkRound("J", tempHand))
 		{
@@ -132,13 +152,23 @@ public class Com extends Player
 		currBid += aceCount();
 		
 		//if we do not have run and are not biddign on kiddey the longest suit with an ace will be the trump suit. Also calculating if AI has any 9s in here because it is the easiest place to
-		currBid += checkLongSuit();
+		longSuit = checkLongSuit();
+		tempSuit = getSuit(longSuit);
 		
-		for(int count = 0; count < marriages; count++ )
-		{
-			currBid+=2;
-		}
-			
+		//we are not going to return the length of the suit but the point value that we can add on to our bid
+				// for a 5 card suit with an ace we add 10 points
+				//for a 6 card suit with an ace we add 11 points
+				//for a 7 card suit with an ace we add 12 points
+				
+		if(tempSuit.length == 5)
+			currBid += 10;
+				
+		else if(tempSuit.length == 6)
+			currBid += 11;
+				
+		else if(tempSuit.length == 7)
+			currBid +=  12;
+					
 		if(pinochles == 1)
 			currBid+= 4;
 	
@@ -155,9 +185,10 @@ public class Com extends Player
 		
 	}
 	
-	private int checkLongSuit() 
+	private char checkLongSuit() 
 	{
-		int result = 0;
+		int currLength = 0;
+		char result = 0;
 		Card [] tempSuit;
 		
 		for(int count = 0; count < 4; count++)
@@ -168,10 +199,13 @@ public class Com extends Player
 				case 0:
 					tempSuit = getHearts();
 					
-					if(tempSuit.length > result && tempSuit.length > 4)
+					if(tempSuit.length > currLength && tempSuit.length > 4)
 					{
 						if(tempSuit[tempSuit.length-1].getValue().equals("A"))
-							result = tempSuit.length;
+						{
+							currLength = tempSuit.length;
+							result = tempSuit[0].getSuit();
+						}
 					}
 						
 					break;
@@ -179,10 +213,13 @@ public class Com extends Player
 				case 1:
 					tempSuit = getSpades();
 					
-					if(tempSuit.length > result && tempSuit.length > 4)
+					if(tempSuit.length > currLength && tempSuit.length > 4)
 					{
 						if(tempSuit[tempSuit.length-1].getValue().equals("A"))
-							result = tempSuit.length;
+						{
+							currLength = tempSuit.length;
+							result = tempSuit[0].getSuit();
+						}
 					}
 						
 					break;
@@ -190,10 +227,13 @@ public class Com extends Player
 				case 2:
 					tempSuit = getDiamonds();
 					
-					if(tempSuit.length > result && tempSuit.length > 4)
+					if(tempSuit.length > currLength && tempSuit.length > 4)
 					{
 						if(tempSuit[tempSuit.length-1].getValue().equals("A"))
-							result = tempSuit.length;
+						{
+							currLength = tempSuit.length;
+							result = tempSuit[0].getSuit();
+						}
 					}
 						
 					break;
@@ -201,30 +241,19 @@ public class Com extends Player
 				case 3:
 					tempSuit = getClubs();
 					
-					if(tempSuit.length > result && tempSuit.length > 4)
+					if(tempSuit.length > currLength && tempSuit.length > 4)
 					{
 						if(tempSuit[tempSuit.length-1].getValue().equals("A"))
-							result = tempSuit.length;
+						{
+							currLength = tempSuit.length;
+							result = tempSuit[0].getSuit();
+						}
 					}
 						
 					break;
 			}
 		}
-		
-		//we are not going to return the length of the suit but the point value that we can add on to our bid
-		// for a 5 card suit with an ace we add 10 points
-		//for a 6 card suit with an ace we add 11 points
-		//for a 7 card suit with an ace we add 12 points
-		
-		if(result == 5)
-			result = 10;
-		
-		else if(result == 6)
-			result = 11;
-		
-		else if(result == 7)
-			result = 12;
-			
+				
 		return result;
 	}
 
@@ -237,47 +266,34 @@ public class Com extends Player
 		for(int count = 0; count < tempHand.length; count++)
 		{
 			if(tempHand[count].getValue().equals("A"))
-				result++;
-			
+				result++;	
 		}
 		
 		return result;
 		
 	}
-	private char checkRun(Card [] tempHand)
+	private void checkRun(Card [] tempHand)
 	{
 		Card[] spades = getSpades();
 		Card[] clubs = getClubs();
 		Card[] hearts = getHearts();
 		Card[] diamonds = getDiamonds();
 
-		String runSuits = "";
-		char result = 0;
+		String tempRunSuits = "";
 		
 		if(hasRun(spades))
-			runSuits = runSuits.concat("S");	
+			tempRunSuits = tempRunSuits.concat("S");	
 		
 		if(hasRun(hearts))
-			runSuits.concat("H");
+			tempRunSuits = tempRunSuits.concat("H");
 		
 		if(hasRun(clubs))
-			runSuits.concat("C");	
+			tempRunSuits = tempRunSuits.concat("C");	
 		
 		if(hasRun(diamonds))
-			runSuits = runSuits.concat("D");
-			
-		if(runSuits.length() == 1)
-			result = runSuits.charAt(0);
-			
-		else if(runSuits.length() > 1)
-		{
-			
-		}
+			tempRunSuits = tempRunSuits.concat("D");
 		
-		else
-			result = ' ';
-		
-		return result;
+		setRunSuits(tempRunSuits);	
 	}
 
 	private boolean hasRun(Card[] suit)
@@ -339,7 +355,7 @@ public class Com extends Player
 			
 			result = true;
 		
-		else if(!bidOnKiddey && cardCount == 4)
+		else if(!bidOnKiddey && !getisBiddingWinner() && cardCount == 4)
 		{
 			bidOnKiddey = true;
 		}
@@ -363,29 +379,32 @@ public class Com extends Player
 			}
 			
 			if(first)
-			{
-				marriageCount+= updateMarriageCount(queenCount, kingCount);
+			{	
+				if(queenCount > 0 && kingCount > 0)
+					marriageSuits = marriageSuits.concat(String.valueOf(tempHand[index-1].getSuit()));
+				
+				
+				marriageCount+= updateMarriageCount(queenCount, kingCount, tempHand[index-1].getSuit());
 				//king and queen has to be in the same suit so we have to reset the counters
 				queenCount = 0;
 				kingCount = 0;
 			}
 			
-			if(tempHand[index].getSuit() != getTrumpSuit())
-			{
-			
-				if(tempHand[index].getValue().equals("Q") && tempHand[index].getSuit() != getTrumpSuit())
-				{
+			if(tempHand[index].getValue().equals("Q"))
 					queenCount++;
-				}
 			
-				else if(tempHand[index].getValue().equals("K"))
-				{
-					kingCount++;
-				}
-			}
+			
+			else if(tempHand[index].getValue().equals("K") )
+				kingCount++;
+			
+			
 		}
 		
-		marriageCount += updateMarriageCount(queenCount, kingCount); //one last time to add to the diamond marriages
+		marriageCount += updateMarriageCount(queenCount, kingCount, 'D'); //one last time to add to the diamond marriages
+		
+		if(queenCount > 0 && kingCount > 0)
+			marriageSuits = marriageSuits.concat("D");
+		
 		
 		return marriageCount;
 	}
@@ -438,16 +457,29 @@ public class Com extends Player
 		return result;
 	}
 	
-	private int updateMarriageCount(int queenCount, int kingCount) //loops until we either run out of queens or kings and returns the sums
+	private int updateMarriageCount(int queenCount, int kingCount, char c) //loops until we either run out of queens or kings and returns the sums
 	{
 		int counter = 0;
+		int currBid = this.getBid();
 		
 		while(queenCount > 0 && kingCount > 0)
 		{
+			if(GameController.getTrumpSuit() == ' ')
+				currBid+=2;
+			
+			else if(c == GameController.getTrumpSuit())
+				currBid+=4;
+			
+				
+			else
+				currBid+=2;
+			
 			counter++;
 			queenCount--;
 			kingCount--;
 		}
+		
+		setBid(currBid);
 		
 		return counter;
 	}
@@ -496,10 +528,18 @@ public class Com extends Player
 		return result;
 	}
 
-	public void displayMeld() 
-	{
-		//String meld = "";
+	public void calcTrumpSuit()
+	{	
+		if(!runSuits.equals(""))
+		{
+			GameController.setTrumpSuit(runSuits.charAt(0));
+		}
 		
-		
+		else
+		{
+			GameController.setTrumpSuit(checkLongSuit());
+		}
 	}
+
+
 }
