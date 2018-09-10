@@ -121,7 +121,7 @@ public class Com extends Player
 		if(runSuits != "")
 			currBid+= 15;
 		
-		int marriages = checkMarriage(tempHand);
+		checkMarriage(tempHand);
 		
 		pinochles  = checkPinochles();
 		
@@ -380,11 +380,12 @@ public class Com extends Player
 			
 			if(first)
 			{	
-				if(queenCount > 0 && kingCount > 0)
+				if(queenCount > 0 && kingCount > 0 && GameController.getTrumpSuit() != ' ')
+				{
 					marriageSuits = marriageSuits.concat(String.valueOf(tempHand[index-1].getSuit()));
+					marriageCount+= updateMarriageCount(queenCount, kingCount, tempHand[index-1].getSuit());
+				}
 				
-				
-				marriageCount+= updateMarriageCount(queenCount, kingCount, tempHand[index-1].getSuit());
 				//king and queen has to be in the same suit so we have to reset the counters
 				queenCount = 0;
 				kingCount = 0;
@@ -465,15 +466,21 @@ public class Com extends Player
 		while(queenCount > 0 && kingCount > 0)
 		{
 			if(GameController.getTrumpSuit() == ' ')
+			{
+				System.out.println("adding regular marriage");
 				currBid+=2;
-			
+			}
 			else if(c == GameController.getTrumpSuit())
+			{
+				System.out.println("adding regular marriage");
 				currBid+=4;
-			
+			}
 				
 			else
+			{
+				System.out.println("adding regular marriage");
 				currBid+=2;
-			
+			}
 			counter++;
 			queenCount--;
 			kingCount--;

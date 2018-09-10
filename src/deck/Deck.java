@@ -1,7 +1,6 @@
 package deck;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 import gameController.GameController;
 import player.Player;
