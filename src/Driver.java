@@ -17,8 +17,9 @@ public class Driver {
 	public static void main(String[] args)
 	{
 		
-		//GameController.Start();
+		GameController.Start();
 		
+		/*
 		Com testComputer = new Com(3);
 		
 		testComputer.addToHand(new Card('S', "Q", 'B'));
@@ -45,7 +46,7 @@ public class Driver {
 		GameController.setBiddingWinner(testComputer);
 		GameController.displayMeld();
 		System.out.println(GameController.getTrumpSuit());
-		
+		*/
 	}
 	
 }

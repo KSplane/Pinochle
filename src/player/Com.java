@@ -116,42 +116,71 @@ public class Com extends Player
 		int currBid = 0;
 		char longSuit;
 		
+		System.out.println("about to chec run");
 		checkRun(tempHand);
 			
 		if(runSuits != "")
 			currBid+= 15;
 		
-		checkMarriage(tempHand);
+		System.out.println("Bid is at: " + currBid);
 		
+		System.out.println("about to check marriages");
+		checkMarriage(tempHand);
+		System.out.println("Bid is at: " + currBid);
+		
+		System.out.println("about to check pinochles");
 		pinochles  = checkPinochles();
 		
+		if(pinochles == 1)
+			currBid+= 4;
+	
+		else if (pinochles > 1)
+			currBid += 30;
+		
+		System.out.println("Bid is at: " + currBid);
+	
+		System.out.println("about to check jacks around");
 		if(checkRound("J", tempHand))
 		{
 			currBid+=4;
 			hasJackAround = true;
 		}
 		
+		System.out.println("Bid is at: " + currBid);
+		
+		System.out.println("about to check queens around");
 		if(checkRound("Q", tempHand))
 		{
 			currBid += 6;
 			hasQueenAround = true;
 		}
+		
+		System.out.println("Bid is at: " + currBid);
 			
+		System.out.println("about to check kings around");
 		if(checkRound("K", tempHand))
 		{
 			hasKingAround = true;
 			currBid += 8;
 		}
 		
+		System.out.println("Bid is at: " + currBid);
+		
+		System.out.println("about to check aces around");
 		if(checkRound("A", tempHand))
 		{
 			hasAceAround = true;
 			currBid += 10;
 		}
 		
+		System.out.println("Bid is at: " + currBid);
+		
+		System.out.println("counting aces");
 		currBid += aceCount();
+		System.out.println("Bid is at: " + currBid);
 		
 		//if we do not have run and are not biddign on kiddey the longest suit with an ace will be the trump suit. Also calculating if AI has any 9s in here because it is the easiest place to
+		System.out.println("checking long suit");
 		longSuit = checkLongSuit();
 		tempSuit = getSuit(longSuit);
 		
@@ -168,20 +197,19 @@ public class Com extends Player
 				
 		else if(tempSuit.length == 7)
 			currBid +=  12;
+		
+		System.out.println("Bid is at: " + currBid);
 					
-		if(pinochles == 1)
-			currBid+= 4;
-	
-		
-		else if (pinochles > 1)
-			currBid += 30;
-		
+		System.out.println("about to check if were bidding on kiddey");
 		if(bidOnKiddey)
 		{
 			currBid+= 15;
 		}
 		
-		this.setBid(currBid);
+		System.out.println("Bid is at: " + currBid);
+		
+		currBid+= getBid();
+		setBid(currBid);
 		
 	}
 	
@@ -363,11 +391,10 @@ public class Com extends Player
 		return result;	
 	}
 	
-	private int checkMarriage(Card[] tempHand)
+	private void checkMarriage(Card[] tempHand)
 	{
 		int queenCount    = 0;
 		int kingCount     = 0;
-		int marriageCount = 0;
 		
 		boolean first = false;
 		
@@ -380,11 +407,9 @@ public class Com extends Player
 			
 			if(first)
 			{	
-				if(queenCount > 0 && kingCount > 0 && GameController.getTrumpSuit() != ' ')
-				{
-					marriageSuits = marriageSuits.concat(String.valueOf(tempHand[index-1].getSuit()));
-					marriageCount+= updateMarriageCount(queenCount, kingCount, tempHand[index-1].getSuit());
-				}
+				if(queenCount > 0 && kingCount > 0)
+						updateMarriageCount(queenCount, kingCount, tempHand[index-1].getSuit());
+				
 				
 				//king and queen has to be in the same suit so we have to reset the counters
 				queenCount = 0;
@@ -401,13 +426,7 @@ public class Com extends Player
 			
 		}
 		
-		marriageCount += updateMarriageCount(queenCount, kingCount, 'D'); //one last time to add to the diamond marriages
-		
-		if(queenCount > 0 && kingCount > 0)
-			marriageSuits = marriageSuits.concat("D");
-		
-		
-		return marriageCount;
+		updateMarriageCount(queenCount, kingCount, 'D'); //one last time to add to the diamond marriages	
 	}
 	
 	private int checkPinochles()
@@ -458,37 +477,55 @@ public class Com extends Player
 		return result;
 	}
 	
-	private int updateMarriageCount(int queenCount, int kingCount, char c) //loops until we either run out of queens or kings and returns the sums
+	private void updateMarriageCount(int queenCount, int kingCount, char c) //loops until we either run out of queens or kings and returns the sums
 	{
-		int counter = 0;
 		int currBid = this.getBid();
+		System.out.println("bid is at: " + currBid );
+		char trumpSuit = GameController.getTrumpSuit();
+		System.out.println("Trump suit is: " + trumpSuit);
+		System.out.println("runSuits is: " + runSuits);
+		System.out.println("suit is: " + c);
 		
 		while(queenCount > 0 && kingCount > 0)
 		{
-			if(GameController.getTrumpSuit() == ' ')
+			System.out.println("in whle loop");
+			System.out.println(runSuits.indexOf(c));
+			
+			if(runSuits.indexOf(c) < 0)
 			{
-				System.out.println("adding regular marriage");
-				currBid+=2;
-			}
-			else if(c == GameController.getTrumpSuit())
-			{
-				System.out.println("adding regular marriage");
-				currBid+=4;
-			}
+				System.out.println("hi");
 				
-			else
-			{
-				System.out.println("adding regular marriage");
-				currBid+=2;
+				if(trumpSuit == ' ')
+				{
+					System.out.println("my");
+					marriageSuits = marriageSuits.concat(Character.toString(c));
+					currBid+=2;
+				}
+				
+				else if(trumpSuit == c)
+				{
+					System.out.println("name");
+					marriageSuits = marriageSuits.concat(Character.toString(c));
+					currBid+=4;
+				}
+			
+				else
+				{
+					System.out.println("is");
+					marriageSuits = marriageSuits.concat(Character.toString(c));
+					currBid+=2;
+				}
+				
 			}
-			counter++;
+			
+			System.out.println("what?");
 			queenCount--;
 			kingCount--;
 		}
 		
 		setBid(currBid);
+		System.out.println(getBid());
 		
-		return counter;
 	}
 	
 	private boolean checkRound(String value, Card [] tempHand)
