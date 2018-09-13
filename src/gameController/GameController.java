@@ -237,6 +237,27 @@ public class GameController
 				acesAround = ((Com) tempPlayer).isHasAceAround();
 				runs = ((Com) tempPlayer).getRunSuits();
 				
+				if(runs != "")
+				{
+					Card [] tempSuit = tempPlayer.getSuit(runs.charAt(0));
+					int index = 0;
+				
+					do{
+					
+						if(tempSuit[index].getValue() == "9")
+						{
+							System.out.print(tempSuit[index].getValue() + tempSuit[index].getSuit() + ", ");
+							index++;
+						}
+					
+					}while(tempSuit[index].getValue() == "9");
+					
+					if(runs.length() == 1)
+					{
+						System.out.print("Has a run in " + runs + " , ");
+					}
+				}
+				
 				if(!marriages.equals(""))
 				{
 					System.out.print("marriages: ");
@@ -275,11 +296,7 @@ public class GameController
 				{
 					System.out.print(", Has Ace Around");
 				}
-				
-				if(runs != "")
-				{
-					System.out.print(", Has a run in " + runs);
-				}
+					
 			}
 			
 			System.out.println();
