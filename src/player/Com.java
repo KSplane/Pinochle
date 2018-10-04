@@ -22,7 +22,6 @@ public class Com extends Player
 		super(numberOfPlayers);
 		setBidOnKiddey(false);
 		setBid(0); //so we can tell that we have not calculated our bid yet
-		setIsPlayer(false);
 		runSuits = "";
 		marriageSuits = "";
 		hasJackAround = hasQueenAround = hasKingAround = hasTenAround = hasAceAround = false;
@@ -100,12 +99,25 @@ public class Com extends Player
 		this.runSuits = runSuits;
 	}
 
-	public int getNineCount() {
+	public int getNineCount()
+	{
+		if(GameController.getTrumpSuit() != ' ')
+		{
+			Card [] tempSuit = getSuit(GameController.getTrumpSuit());
+			int index = 0;
+			
+			do{
+				
+				if(tempSuit[index].getValue() == "9")
+				{
+					nineCount++;
+					index++;
+				}
+			
+			}while(tempSuit[index].getValue() == "9");
+		}
+		
 		return nineCount;
-	}
-
-	public void setNineCount(int nineCount) {
-		this.nineCount = nineCount;
 	}
 
 	public void calcualteBid()
@@ -320,7 +332,7 @@ public class Com extends Player
 		
 		if(hasRun(diamonds))
 			tempRunSuits = tempRunSuits.concat("D");
-		
+				
 		setRunSuits(tempRunSuits);	
 	}
 
@@ -584,6 +596,6 @@ public class Com extends Player
 			GameController.setTrumpSuit(checkLongSuit());
 		}
 	}
-
-
+	
+	
 }

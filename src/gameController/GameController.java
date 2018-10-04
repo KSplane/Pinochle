@@ -107,7 +107,7 @@ public class GameController
 			
 			for(int count = 0; count < numberOfPlayers; count++)
 			{
-				if(((Player) currBidder).getIsPlayer())
+				if(currBidder instanceof Player)
 				{
 					((Player) currBidder).printHand();
 				}
@@ -147,7 +147,7 @@ public class GameController
 			
 			if(currPlayer.getIsBidding()) //if the current player is bidding
 			{
-				if(currPlayer.getIsPlayer())
+				if(!(currPlayer instanceof Com))
 				{
 					System.out.println("Would you like to bid? (y or n)");
 					
@@ -198,34 +198,46 @@ public class GameController
 		
 		
 		System.out.println(biddingWinner.getName());
-		
 		biddingWinner.addKideyToHand(kiddy);
 		biddingWinner.printHand();
-		((Com) biddingWinner).setMarriageSuits("");
-		((Com) biddingWinner).calcualteBid();
+		
+		if(biddingWinner instanceof Com )
+		{
+			((Com) biddingWinner).setMarriageSuits("");
+			((Com) biddingWinner).calcualteBid();
+		}
 		
 		displayMeld();
 	}
 	
-	
-	
 	public static void displayMeld() 
 	{
-		if(!biddingWinner.getIsPlayer())
-			((Com) biddingWinner).calcTrumpSuit();
-		
-		Player tempPlayer = Table.Next();
 		String marriages;
 		String runs;
 		int pinochles;
+		int nines;
 		boolean jacksAround;
 		boolean queensAround;
 		boolean kingsAround;
-		boolean acesAround;
+		boolean acesAround; 
+		
+		Scanner sc = UtilInstances.getScannerInstance();
+		 Player tempPlayer = Table.Next();
+		 
+		
+		if(biddingWinner instanceof Com)
+			((Com) biddingWinner).calcTrumpSuit();
+		
+		else
+		{
+			System.out.println("Please declare trump: ");
+			trumpSuit = sc.next().charAt(0); // no way to read in a char 
+		}
+
 		
 		for(int count = 0; count < Table.getLength(); count++)
 		{
-			if(!tempPlayer.getIsPlayer())
+			if(tempPlayer instanceof Com) //if were playing a computer hand
 			{
 				System.out.print(tempPlayer.getName() + ": ");
 				
@@ -236,28 +248,15 @@ public class GameController
 				kingsAround = ((Com) tempPlayer).isHasKingAround();
 				acesAround = ((Com) tempPlayer).isHasAceAround();
 				runs = ((Com) tempPlayer).getRunSuits();
+				nines = ((Com) tempPlayer).getNineCount();
 				
-				if(runs != "")
+				if(nines > 0)
 				{
-					Card [] tempSuit = tempPlayer.getSuit(runs.charAt(0));
-					int index = 0;
-				
-					do{
-					
-						if(tempSuit[index].getValue() == "9")
-						{
-							System.out.print(tempSuit[index].getValue() + tempSuit[index].getSuit() + ", ");
-							index++;
-						}
-					
-					}while(tempSuit[index].getValue() == "9");
-					
-					if(runs.length() == 1)
+					for(int nineCount = 0; nineCount < nines; nineCount++)
 					{
-						System.out.print("Has a run in " + runs + " , ");
+						System.out.print("9" + trumpSuit + ",");
 					}
 				}
-				
 				if(!marriages.equals(""))
 				{
 					System.out.print("marriages: ");
@@ -271,7 +270,7 @@ public class GameController
 							System.out.print(", " + marriages.charAt(marriageCount));	
 					}
 				}
-					
+				
 				if(pinochles > 0)
 				{
 					System.out.print(", pinochles: " + pinochles);
@@ -296,16 +295,98 @@ public class GameController
 				{
 					System.out.print(", Has Ace Around");
 				}
+				
+				if(runs != "") //ADD CHECK NINES HERE FUKBOI
+				{
+					if(runs.length() == 1)
+					{
+						System.out.print("Has a run in " + runs + " , ");
+					}
+					else if(runs.length() == 2)
+					{
+						if(tempPlayer.getSuit(runs.charAt(0)).length > tempPlayer.getSuit(runs.charAt(1)).length)
+							System.out.print("Has a run in " + runs.charAt(0) + " , ");
+						else
+							System.out.print("Has a run in " + runs.charAt(1) + " , ");
+					}
 					
+					else
+						System.out.println("How the fuck did you get 15 cards in a row that wre meaningful fuck you");
+					
+				}
 			}
 			
-			System.out.println();
-			tempPlayer = Table.Next();
-		}
+			else //we are displaying the players meld
+			{
+				Card [] tempMeld = new Card [2];
+				Card [] tempHand = tempPlayer.getHand();
+				Card [] placeholderMeld;
+				int arrayIndex = 0;
+				String response;
+				String meld = "";
+				int meldIndex;
+				boolean done = false;
 				
-	}
-	
+				System.out.println("Do you have any meld to play?");
+				response = sc.next();
+				
+				if(response.equals("Y") || response.equals("y")) // Proceed to loop if they have meld to play
+				{
+					while(!done)
+					{
+						System.out.print("Please enter index of the next card you wish to play for meld:  ");
+						meldIndex = sc.nextInt();
+						
+						tempMeld[arrayIndex] = tempHand[meldIndex];
+						
+						System.out.print("Play Meld: ");
+						response = sc.next(); 
+						
+						if(response.equals("Y") || response.equals("y")) // cat meld onto meld string and refresh tempMeld
+						{
+							tempPlayer.sort(tempMeld);
+							meld = meld.concat(tempPlayer.checkMeld(tempMeld));
+							
+							arrayIndex = 0;
+							tempMeld = new Card[2];
+							
+							System.out.println("Do you have any meld to play?");
+							response = sc.next();
+							
+							if(response.equals("N") || response.equals("n"))
+								done = true;
+						}
+						
+						else //need to continue adding cards to meld
+						{
+							if(arrayIndex == 1)
+							{
+								placeholderMeld = tempMeld;
+								tempMeld = new Card[4];
+								tempPlayer.rePopulate(tempMeld, placeholderMeld);
+							}
+							
+							else if(arrayIndex == 3)
+							{
+								placeholderMeld = tempMeld;
+								tempMeld = new Card[5];
+								tempPlayer.rePopulate(tempMeld, placeholderMeld);
+							}
+							
+							arrayIndex++;
+						}
+					}
+					
+					System.out.println(meld);
+				}
+			}
+				
+			System.out.println();	
+			tempPlayer = Table.Next();
+			}
+		}
 
+	
 	private static boolean checkIsBiddingPhaseOver() 
 	{
 		Player[] tempTable = Table.getTableInstance();

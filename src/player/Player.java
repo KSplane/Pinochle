@@ -251,7 +251,7 @@ public class Player
 		}
 	}
 	
-	private Card[] sort(Card[] currHand)
+	public Card[] sort(Card[] currHand)
 	{
 		boolean swap = false;
 		Card placeHolder;
@@ -274,7 +274,7 @@ public class Player
 		return currHand;
 	}
 	
-	private Card[] rePopulate(Card[] finished, Card[] temp)
+	public Card[] rePopulate(Card[] finished, Card[] temp)
 	{
 		for(int count = 0; count < temp.length; count++)
 		{
@@ -306,5 +306,28 @@ public class Player
 		}
 		
 	}
-
+	
+	public String checkMeld(Card[] currMeld)
+	{
+		String result = "";
+		
+		if(currMeld.length == 2)
+		{	
+			if(currMeld[0].getValue() == "J")
+				
+				result = result.concat("pinochles: 1, ");	
+			
+			else
+				result = result.concat("marriages: " + currMeld[0].getSuit() + ",");
+		}
+		
+		else if(currMeld.length == 4)
+			result = result.concat(currMeld[0].getValue() + "around, "); 
+		
+		
+		else
+			result = result.concat("runs: " + currMeld[0].getSuit() + ", ");
+		
+		return result;
+	}
 }
