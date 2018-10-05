@@ -213,6 +213,7 @@ public class GameController
 	public static void displayMeld() 
 	{
 		String marriages;
+		String meld = "";
 		String runs;
 		int pinochles;
 		int nines;
@@ -239,7 +240,7 @@ public class GameController
 		{
 			if(tempPlayer instanceof Com) //if were playing a computer hand
 			{
-				System.out.print(tempPlayer.getName() + ": ");
+				meld = meld.concat(tempPlayer.getName() + ": ");
 				
 				marriages   = ((Com) tempPlayer).getMarriageSuits();
 				pinochles   = ((Com) tempPlayer).getPinochles();
@@ -254,65 +255,64 @@ public class GameController
 				{
 					for(int nineCount = 0; nineCount < nines; nineCount++)
 					{
-						System.out.print("9" + trumpSuit + ",");
+						meld = meld.concat("9" + trumpSuit + ",");
 					}
 				}
 				if(!marriages.equals(""))
 				{
-					System.out.print("marriages: ");
+					meld = meld.concat("marriages: ");
 					
 					for(int marriageCount = 0; marriageCount < marriages.length(); marriageCount++)
 					{
 						if(marriageCount == 0)
-							System.out.print(marriages.charAt(marriageCount));
+							meld = meld.concat(Character.toString(marriages.charAt(marriageCount)));
 						
 						else
-							System.out.print(", " + marriages.charAt(marriageCount));	
+							meld = meld.concat(", " + marriages.charAt(marriageCount));	
 					}
 				}
 				
 				if(pinochles > 0)
 				{
-					System.out.print(", pinochles: " + pinochles);
+					meld = meld.concat(", pinochles: " + pinochles);
 				}
 				
 				if(jacksAround)
 				{
-					System.out.print(", Has Jack Around");
+					meld = meld.concat(", Has Jack Around");
 				}
 				
 				if(queensAround)
 				{
-					System.out.print(", Has Queen Around");
+					meld = meld.concat(", Has Queen Around");
 				}
 				
 				if(kingsAround)
 				{
-					System.out.print(", Has King Around");
+					meld = meld.concat(", Has King Around");
 				}
 				
 				if(acesAround)
 				{
-					System.out.print(", Has Ace Around");
+					meld = meld.concat(", Has Ace Around");
 				}
 				
 				if(runs != "") //ADD CHECK NINES HERE FUKBOI
 				{
 					if(runs.length() == 1)
 					{
-						System.out.print("Has a run in " + runs + " , ");
+						meld = meld.concat("Has a run in " + runs + " , ");
 					}
 					else if(runs.length() == 2)
 					{
 						if(tempPlayer.getSuit(runs.charAt(0)).length > tempPlayer.getSuit(runs.charAt(1)).length)
-							System.out.print("Has a run in " + runs.charAt(0) + " , ");
+							meld = meld.concat("Has a run in " + runs.charAt(0) + " , ");
 						else
-							System.out.print("Has a run in " + runs.charAt(1) + " , ");
+							meld = meld.concat("Has a run in " + runs.charAt(1) + " , ");
 					}
 					
 					else
-						System.out.println("How the fuck did you get 15 cards in a row that wre meaningful fuck you");
-					
+						meld = meld.concat("How the fuck did you get 15 cards in a row that wre meaningful fuck you");
 				}
 			}
 			
@@ -323,7 +323,6 @@ public class GameController
 				Card [] placeholderMeld;
 				int arrayIndex = 0;
 				String response;
-				String meld = "";
 				int meldIndex;
 				boolean done = false;
 				
@@ -376,14 +375,13 @@ public class GameController
 							arrayIndex++;
 						}
 					}
-					
-					System.out.println(meld);
 				}
 			}
-				
-			System.out.println();	
+			meld = meld.concat("\n");	
 			tempPlayer = Table.Next();
 			}
+		
+			System.out.println(meld);
 		}
 
 	
