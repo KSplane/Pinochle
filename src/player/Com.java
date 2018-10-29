@@ -16,6 +16,7 @@ public class Com extends Player
 	private String  marriageSuits;
 	private int     pinochles;
 	private int     nineCount;
+	private String [] memorizedCards;
 
 	public Com(int numberOfPlayers) 
 	{
@@ -25,6 +26,16 @@ public class Com extends Player
 		runSuits = "";
 		marriageSuits = "";
 		hasJackAround = hasQueenAround = hasKingAround = hasTenAround = hasAceAround = false;
+		
+		if(GameController.getNumberOfPlayer() == 3)
+		{
+			memorizedCards = new String [2];
+		}
+		
+		if(GameController.getNumberOfPlayer() == 4)
+		{
+			memorizedCards = new String [3];
+		}
 	}
 		
 	public boolean isHasJackAround() {
@@ -97,6 +108,18 @@ public class Com extends Player
 
 	public void setRunSuits(String runSuits) {
 		this.runSuits = runSuits;
+	}
+
+	public String[] getMemorizedCards() {
+		return memorizedCards;
+	}
+
+	public void setMemorizedCards(String[] memorizedCards) {
+		this.memorizedCards = memorizedCards;
+	}
+
+	public void setNineCount(int nineCount) {
+		this.nineCount = nineCount;
 	}
 
 	public int getNineCount()
@@ -597,5 +620,22 @@ public class Com extends Player
 		}
 	}
 	
-	
+	public void Memorize(String meld) 
+	{
+		if(memorizedCards[0] == null)
+		{
+			memorizedCards[0] = meld;
+		}
+		
+		else if(memorizedCards[1] == null)
+		{
+			memorizedCards[1] = meld;
+		}
+		
+		else if(memorizedCards.length == 3 && memorizedCards[2] == null)
+		{
+			memorizedCards[2] = meld;
+		}
+		
+	}				
 }

@@ -14,6 +14,7 @@ public class GameController
 	private static int bid = 20;
 	private static Player biddingWinner;
 	private static char trumpSuit;
+	private static int numberOfPlayer;
 	
 	public GameController()
 	{
@@ -41,6 +42,7 @@ public class GameController
 		GameController.kiddy = kiddy;
 	}
 	
+	
 	public static Card[] getKiddy()
 	{
 		if(kiddy == null)
@@ -51,6 +53,14 @@ public class GameController
 		return GameController.kiddy;
 	}
 	
+	public static int getNumberOfPlayer() {
+		return numberOfPlayer;
+	}
+
+	public static void setNumberOfPlayer(int numberOfPlayer) {
+		GameController.numberOfPlayer = numberOfPlayer;
+	}
+
 	public static void setBid(int bid)
 	{
 		GameController.bid = bid;
@@ -65,7 +75,7 @@ public class GameController
 	{
 		System.out.println("Please enter the number of players: ");
 		
-		int numberOfPlayer = UtilInstances.getScannerInstance().nextInt();
+		numberOfPlayer = UtilInstances.getScannerInstance().nextInt();
 		setUpGame(numberOfPlayer);
 	}
 	
@@ -210,7 +220,7 @@ public class GameController
 		displayMeld();
 	}
 	
-	public static void displayMeld() 
+	private static void displayMeld() 
 	{
 		String marriages;
 		String meld = "";
@@ -223,7 +233,7 @@ public class GameController
 		boolean acesAround; 
 		
 		Scanner sc = UtilInstances.getScannerInstance();
-		 Player tempPlayer = Table.Next();
+		Player tempPlayer = Table.Next();
 		 
 		
 		if(biddingWinner instanceof Com)
@@ -264,12 +274,14 @@ public class GameController
 					
 					for(int marriageCount = 0; marriageCount < marriages.length(); marriageCount++)
 					{
-						if(marriageCount == 0)
+						//if(marriageCount == 0)
 							meld = meld.concat(Character.toString(marriages.charAt(marriageCount)));
 						
-						else
-							meld = meld.concat(", " + marriages.charAt(marriageCount));	
+						//else
+							//meld = meld.concat(", " + marriages.charAt(marriageCount));	
 					}
+					
+					meld = meld.concat(", ");
 				}
 				
 				if(pinochles > 0)
@@ -377,14 +389,28 @@ public class GameController
 					}
 				}
 			}
-			meld = meld.concat("\n");	
+			
+			memorize(meld, tempPlayer.getName());
+			System.out.println(meld);
+			meld = "";
 			tempPlayer = Table.Next();
 			}
-		
-			System.out.println(meld);
 		}
-
 	
+	private static void memorize(String meld, String name)
+	{
+		Player [] tempTable= Table.getTableInstance();
+		
+		for(int testCount = 0; testCount < Table.getLength(); testCount++)
+		{
+			if(!tempTable[testCount].getName().equals(name) && tempTable[testCount] instanceof Com)
+			{
+				((Com)tempTable[testCount]).Memorize(meld);
+			}
+		}
+		
+	}
+
 	private static boolean checkIsBiddingPhaseOver() 
 	{
 		Player[] tempTable = Table.getTableInstance();
@@ -423,4 +449,5 @@ public class GameController
 			
 		}while(count < tempTable.length);
 	}
+
 }
