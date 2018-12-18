@@ -4,7 +4,8 @@ import deck.Card;
 
 public class Player 
 {
-	private Card[] hand;
+	private Card[] hand; //PLEASE FIX THIS SHIT WHEN YOU CONVERT THIS TO C# IN UNITY
+	private int cardsInHand; //PLEASE FIX THIS SHIT WHEN YOU CONVERT THIS TO C# IN UNITY
 	private Card[] spades;
 	private Card[] clubs;
 	private Card[] hearts;
@@ -151,6 +152,14 @@ public class Player
 
 	public void setBiddingWinner(boolean isBiddingWinner) {
 		this.isBiddingWinner = isBiddingWinner;
+	}
+	
+	public int getCardsInHand() {
+		return cardsInHand;
+	}
+
+	public void setCardsInHand(int cardsInHand) {
+		this.cardsInHand = cardsInHand;
 	}
 
 	public void addToHand(Card card)

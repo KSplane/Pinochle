@@ -5,7 +5,6 @@ import gameController.GameController;
 
 public class Com extends Player
 {
-
 	private boolean bidOnKiddey;
 	private String  runSuits;
 	private boolean hasJackAround;
@@ -618,6 +617,8 @@ public class Com extends Player
 		{
 			GameController.setTrumpSuit(checkLongSuit());
 		}
+		
+		System.out.println("trump is:" + GameController.getTrumpSuit());
 	}
 	
 	public void Memorize(String meld) 
@@ -637,5 +638,65 @@ public class Com extends Player
 			memorizedCards[2] = meld;
 		}
 		
+	}
+
+	public Card Lead() 
+	{
+		Card [] cardsToPlay = getSuit(GameController.getTrumpSuit());
+		Card result = null;
+		int cardIndex = 0;
+		
+		cardIndex = checkForCard(cardsToPlay, "A");
+		
+		if(cardIndex == -1)
+			cardIndex = checkForCard(cardsToPlay, "Q");
+		
+		if(cardIndex == -1)
+		{
+		  //we do it	
+		}
+		
+		if(cardIndex != -1)
+			result = cardsToPlay[cardIndex];
+		
+		return result;
+	}
+
+	private int checkForCard(Card [] cardsToPlay, String value) 
+	{
+		int result = -1;
+		
+		for(int count = (cardsToPlay.length - 1); count >= 0; count--)
+		{
+			if(cardsToPlay[count].getValue().equals(value))
+				result = count;
+		}
+				
+		return result;
+	}
+
+	public Card playCard(char leadSuit, Card prevCard) 
+	{
+		Card [] suit = getSuit(leadSuit);
+		
+		//Have to follow suit if able
+		if(suit == null)
+		{
+			
+		}
+		
+		//if not able to follow suit check if can trump
+		else if(getSuit(GameController.getTrumpSuit()) == null)
+		{
+			
+		}
+		
+		//otherwise play figure out next card to play
+		else
+		{
+			
+		}
+	
+		return null;
 	}				
 }

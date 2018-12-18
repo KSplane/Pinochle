@@ -11,6 +11,8 @@ public class Table
 	private static int dealer;
 	private static int curr;
 	
+	private static Player biddingWinner;
+	
 	private Table()
 	{
 		
@@ -33,6 +35,14 @@ public class Table
 	}
 
 
+	public static Player getBiddingWinner() {
+		return biddingWinner;
+	}
+
+	public static void setBiddingWinner(Player biddingWinner) {
+		Table.biddingWinner = biddingWinner;
+	}
+	
 	public static int getCurr() {
 		return curr;
 	}
@@ -117,4 +127,5 @@ public class Table
 	{
 		return table.length;
 	}
+	
 }

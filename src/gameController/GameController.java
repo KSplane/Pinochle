@@ -1,5 +1,6 @@
 package gameController;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import deck.Card;
 import deck.Deck;
@@ -12,7 +13,6 @@ public class GameController
 {
 	private static Card [] kiddy;
 	private static int bid = 20;
-	private static Player biddingWinner;
 	private static char trumpSuit;
 	private static int numberOfPlayer;
 	
@@ -27,14 +27,6 @@ public class GameController
 
 	public static void setTrumpSuit(char trumpSuit) {
 		GameController.trumpSuit = trumpSuit;
-	}
-
-	public  static Player getBiddingWinner() {
-		return biddingWinner;
-	}
-
-	public static void setBiddingWinner(Player biddingWinner) {
-		GameController.biddingWinner = biddingWinner;
 	}
 
 	public static void setKiddy(Card [] kiddy)
@@ -204,10 +196,10 @@ public class GameController
 		}
 		
 		if(currBid == 20) //no one bid so the dealer is stuck with the bid
-			biddingWinner = Table.getDealer();
+			Table.setBiddingWinner(Table.getDealer());
 		
-		
-		System.out.println(biddingWinner.getName());
+		Player biddingWinner = Table.getBiddingWinner();
+		//System.out.println(biddingWinner.getName());
 		biddingWinner.addKideyToHand(kiddy);
 		biddingWinner.printHand();
 		
@@ -234,7 +226,7 @@ public class GameController
 		
 		Scanner sc = UtilInstances.getScannerInstance();
 		Player tempPlayer = Table.Next();
-		 
+		Player biddingWinner = Table.getBiddingWinner(); 
 		
 		if(biddingWinner instanceof Com)
 			((Com) biddingWinner).calcTrumpSuit();
@@ -250,7 +242,7 @@ public class GameController
 		{
 			if(tempPlayer instanceof Com) //if were playing a computer hand
 			{
-				meld = meld.concat(tempPlayer.getName() + ": ");
+				//meld = meld.concat(tempPlayer.getName() + ": ");
 				
 				marriages   = ((Com) tempPlayer).getMarriageSuits();
 				pinochles   = ((Com) tempPlayer).getPinochles();
@@ -395,8 +387,45 @@ public class GameController
 			meld = "";
 			tempPlayer = Table.Next();
 			}
+		
+			playTricks(tempPlayer);
 		}
 	
+	private static void playTricks(Player tempPlayer) 
+	{
+		char leadSuit = 0;
+		
+		Card prevCard = null;
+		Card nextCard = null;
+				
+		ArrayList<Card> tricks = new ArrayList<Card>();
+		
+		//we need to find the bidding winner to start the tricks
+		String winnerName = Table.getBiddingWinner().getName();
+		
+		do
+		{
+			if(!(tempPlayer.getName().equals(winnerName)))
+				tempPlayer = Table.Next();
+		}while(!(tempPlayer.getName().equals(winnerName)));
+		
+		
+		//while(tempPlayer.getCardsInHand() != 0)
+		//{
+			if(tempPlayer instanceof Com) // the first card of the tricks have special rules
+				prevCard = ((Com)tempPlayer).Lead();
+		
+			leadSuit = prevCard.getSuit();
+		
+			tempPlayer = Table.Next();
+			
+			if(tempPlayer instanceof Com)
+				nextCard = ((Com)tempPlayer).playCard(leadSuit, prevCard);
+			
+			
+		//}
+	}
+
 	private static void memorize(String meld, String name)
 	{
 		Player [] tempTable= Table.getTableInstance();
@@ -405,6 +434,7 @@ public class GameController
 		{
 			if(!tempTable[testCount].getName().equals(name) && tempTable[testCount] instanceof Com)
 			{
+				//System.out.println("memorizing: " + meld);
 				((Com)tempTable[testCount]).Memorize(meld);
 			}
 		}
@@ -443,7 +473,7 @@ public class GameController
 		do
 		{
 			if(tempTable[count].getIsBidding())
-				biddingWinner = tempTable[count];
+				Table.setBiddingWinner(tempTable[count]);
 			
 			count++;
 			
