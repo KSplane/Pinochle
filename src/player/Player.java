@@ -4,8 +4,8 @@ import deck.Card;
 
 public class Player 
 {
-	private Card[] hand; //PLEASE FIX THIS SHIT WHEN YOU CONVERT THIS TO C# IN UNITY
-	private int cardsInHand; //PLEASE FIX THIS SHIT WHEN YOU CONVERT THIS TO C# IN UNITY
+	private Card[] hand; 
+	private int cardsInHand; 
 	private Card[] spades;
 	private Card[] clubs;
 	private Card[] hearts;

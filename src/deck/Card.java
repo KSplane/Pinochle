@@ -60,12 +60,12 @@ public class Card
 		
 		if(!this.value.equals(comparedValue))
 		{
-			if(comparedValue.equals("A")) //IF COMPARING TO AN ACE SWAP THAT SHIT
+			if(comparedValue.equals("A")) //IF COMPARING TO AN ACE SWAP
 			{
 				result = true;
 			}
 			
-			if(comparedValue.equals("10")) //IF COMPARING TO A 10 UNLESS OBJECT IS AN ACE SWAP THAT SHIT
+			if(comparedValue.equals("10")) //IF COMPARING TO A 10 UNLESS OBJECT IS AN ACE SWAP
 			{
 				if(!this.value.equals("A"))
 				{
@@ -73,7 +73,7 @@ public class Card
 				}
 			}
 			
-			else if(comparedValue.equals("K"))//IF COMPARING TO A K IF THE OBJECT IS NOT A 10 OR AN ACE SWAP THAT SHIT
+			else if(comparedValue.equals("K"))//IF COMPARING TO A K IF THE OBJECT IS NOT A 10 OR AN ACE SWAP
 			{
 				if(!this.value.equals("10") && !this.value.equals("A"))
 				{
@@ -81,7 +81,7 @@ public class Card
 				}
 			}
 			
-			else if(comparedValue.equals("Q"))// IF COMPARING TO A QUEEN IF THE OBJECT IS NOT A 9 OR A JACK SWAP THAT SHIT
+			else if(comparedValue.equals("Q"))// IF COMPARING TO A QUEEN IF THE OBJECT IS NOT A 9 OR A JACK SWAP
 			{
 				if(this.value.equals("9") || this.value.equals("J"))
 				{
@@ -89,7 +89,7 @@ public class Card
 				}
 			}
 			
-			else if(comparedValue.equals("J"))// IF COMPARING TO A JACK UNLESS OBJECT IS A 9 SWAP THAT SHIT
+			else if(comparedValue.equals("J"))// IF COMPARING TO A JACK UNLESS OBJECT IS A 9 SWAP
 			{
 				if(this.value.equals("9"))
 				{
